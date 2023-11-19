@@ -2,12 +2,17 @@ package com.boggy.espawners.command;
 
 import com.boggy.espawners.ISpawners;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 public class ISpawnersCommand implements CommandExecutor {
 
@@ -25,9 +30,8 @@ public class ISpawnersCommand implements CommandExecutor {
             player.sendMessage("Made by Boggy");
             player.sendMessage("For support contact " + ChatColor.of("#89a2fa") + "boggymc" + ChatColor.WHITE + " on discord");
         } else if (args.length == 2) {
-
+            if (!player.isOp()) { return false; }
             if (args[0].equalsIgnoreCase("setstacksize")) {
-                if (!player.isOp()) { return false; }
                 Block block = player.getTargetBlockExact(5);
 
                 if (block != null && block.getState() instanceof CreatureSpawner spawner) {
@@ -46,6 +50,20 @@ public class ISpawnersCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.RED + "You are not looking at a spawner!");
                 }
 
+            } else if (args[0].equalsIgnoreCase("givespawner")) {
+                if (plugin.getConfig().getConfigurationSection("spawners").getKeys(false).contains(args[1].toUpperCase())) {
+                    ItemStack spawner = new ItemStack(Material.SPAWNER);
+                    ItemMeta spawnerMeta = spawner.getItemMeta();
+
+                    String spawnedType = args[1].substring(0, 1).toUpperCase() + args[1].substring(1);
+
+                    spawnerMeta.setDisplayName(org.bukkit.ChatColor.RESET + "" + org.bukkit.ChatColor.YELLOW + "" + org.bukkit.ChatColor.BOLD + spawnedType + " spawner");
+                    spawnerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "spawnerType"), PersistentDataType.STRING, spawnedType);
+                    spawner.setItemMeta(spawnerMeta);
+                    player.getInventory().addItem(spawner);
+                } else {
+                    player.sendMessage(ChatColor.RED + "Spawner type not found in config!");
+                }
             }
 
         }

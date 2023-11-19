@@ -45,7 +45,7 @@ public class SpawnerPlaceListener implements Listener {
                 if (player.isSneaking()) {
                     int itemStackSize = e.getItemInHand().getAmount();
                     e.getItemInHand().setAmount(0);
-                    plugin.updateStackSize(spawner, itemStackSize);
+                    plugin.updateStackSize(spawner, itemStackSize - 1);
                 }
             }
         }
