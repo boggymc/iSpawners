@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ISpawners">
+    <output-path>$USER_HOME$/Desktop/server/plugins</output-path>
+    <root id="archive" name="ISpawners.jar">
+      <element id="module-output" name="ISpawners" />
+    </root>
+  </artifact>
+</component>
