@@ -1,6 +1,6 @@
 name: ISpawners
 version: '${project.version}'
-main: com.boggy.espawners.ISpawners
+main: com.boggy.ispawners.ISpawners
 api-version: '1.19'
 commands:
   ispawners:
