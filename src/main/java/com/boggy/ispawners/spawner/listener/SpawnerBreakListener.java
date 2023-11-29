@@ -58,7 +58,7 @@ public class SpawnerBreakListener implements Listener {
         int stackSize = plugin.getStackSize(spawner);
         int toRemove = player.isSneaking() ? 64 : 1;
 
-        if(stackSize <= 0){
+        if(stackSize-toRemove <= 0){
             plugin.removeSpawner(spawner);
             e.getBlock().setType(Material.AIR);
             e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), spawnerDrop);
