@@ -1,4 +1,4 @@
-package com.boggy.ispawners.gui;
+package com.boggy.ispawners.inventory;
 
 import org.bukkit.inventory.ItemStack;
 

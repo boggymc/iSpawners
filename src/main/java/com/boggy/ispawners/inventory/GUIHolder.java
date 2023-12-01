@@ -1,4 +1,4 @@
-package com.boggy.ispawners.gui;
+package com.boggy.ispawners.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package com.boggy.ispawners.spawner.listener;
+package com.boggy.ispawners.spawner.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
