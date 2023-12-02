@@ -13,12 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ISpDropsPage extends ISpInventoryHolder {
 
-    public ISpDropsPage(Player player, String title, int pageNumber, CreatureSpawner spawner)  {
+    public ISpDropsPage(Player player, String title, int pageNumber, CreatureSpawner spawner, Collection<ItemStack> pageItemStacks)  {
         super(54, title, spawner);
 
 
