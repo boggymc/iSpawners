@@ -1,3 +1,12 @@
+# ██╗ ███████╗ ██████╗   █████╗  ██╗    ██╗ ███╗   ██╗ ███████╗ ██████╗  ███████╗
+# ╚═╝ ██╔════╝ ██╔══██╗ ██╔══██╗ ██║    ██║ ████╗  ██║ ██╔════╝ ██╔══██╗ ██╔════╝
+# ██║ ███████╗ ██████╔╝ ███████║ ██║ █╗ ██║ ██╔██╗ ██║ █████╗   ██████╔╝ ███████╗
+# ██║ ╚════██║ ██╔═══╝  ██╔══██║ ██║███╗██║ ██║╚██╗██║ ██╔══╝   ██╔══██╗ ╚════██║
+# ██║ ███████║ ██║      ██║  ██║ ╚███╔███╔╝ ██║ ╚████║ ███████╗ ██║  ██║ ███████║
+# ╚═╝ ╚══════╝ ╚═╝      ╚═╝  ╚═╝  ╚══╝╚══╝  ╚═╝  ╚═══╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝
+# https://www.spigotmc.org/resources/ispawners.113631/
+config-version: '${project.version}' # <-- Don't touch this
+
 # the delay between spawner item generation
 refresh_time: 80
 
@@ -5,10 +14,10 @@ refresh_time: 80
 max_items: 10000
 
 # the amount the max items will be multiplied by for each added spawner
-max_items_multiplier: 1.5
+max-items-multiplier: 1.5
 
-max_stacked_spawners: 500
-
+# limits how many spawners can be stacked
+max-stacked-spawners: 500
 
 spawners:
   CREEPER:

@@ -1,0 +1,51 @@
+# MOB_TYPE:
+#  xp: AMOUNT
+#  drop-chance: odds of adding the items in drops every refresh interval
+#  rare-chance: odds of adding the items in rare every refresh interval
+#  drops:
+#    - ITEM_NAME
+#    - ITEM_NAME
+
+DEFAULT:
+  xp: 2
+  drops-chance: 100
+  rare-chance: 10
+  drops: []
+  rare: []
+
+# Mob specific
+BLAZE:
+  drops:
+    - BLAZE_ROD
+CAVE_SPIDER:
+  rare-chance: 50
+  drops:
+    - STRING
+  rare:
+    - SPIDER_EYE
+CHICKEN:
+  drops:
+    - FEATHER
+    - CHICKEN
+WITHER_SKELETON:
+  rare-chance: 3
+  drops:
+    - COAL
+    - BONE
+  rare:
+    - WITHER_SKELETON_SKULL
+COW:
+  drops:
+    - BEEF
+    - LEATHER
+CREEPER:
+  drops:
+    - GUNPOWDER
+DONKEY:
+  drops:
+    - LEATHER
+DROWNED:
+  drops:
+    - ROTTEN_FLESH
+  rare:
+    - COPPER_INGOT

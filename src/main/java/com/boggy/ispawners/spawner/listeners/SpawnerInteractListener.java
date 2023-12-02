@@ -1,7 +1,8 @@
 package com.boggy.ispawners.spawner.listeners;
 
-import com.boggy.ispawners.Config;
+import com.boggy.ispawners.ISpConfig;
 import com.boggy.ispawners.ISpawners;
+import com.boggy.ispawners.inventory.pages.ISpMenuPage;
 import com.boggy.ispawners.spawner.SpawnersManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -26,11 +27,11 @@ import java.util.UUID;
 
 public class SpawnerInteractListener implements Listener {
     private final ISpawners plugin;
-    private final Config config;
+    private final ISpConfig config;
     private final SpawnersManager spawnersManager;
     public SpawnerInteractListener() {
         this.plugin = ISpawners.getInstance();
-        this.config = this.plugin.getPluginConfig();
+        this.config = this.plugin.getIspConfig();
         this.spawnersManager = this.plugin.getSpawnersManager();
     }
 
@@ -68,6 +69,11 @@ public class SpawnerInteractListener implements Listener {
         Player player = e.getPlayer();
         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
+        if(heldItem.getType().equals(Material.DIAMOND_SWORD)){
+            this.spawnersManager.updateDrops(spawner, 1.5);
+            return;
+        }
+
 //
         if (tryingToStack(heldItem, spawner)){
             player.sendMessage("trying to stack");
@@ -88,13 +94,7 @@ public class SpawnerInteractListener implements Listener {
             spawnersManager.createSpawner(spawner, 1);
         }
 
-
-//        plugin.getSpawnerUITracker().put(e.getPlayer(), spawner);
-
-        spawnersManager.debug(spawner, player);
-//
-//
-//        new SpawnerUI(e.getPlayer(), spawner, plugin).open(player);
+        new ISpMenuPage(player, spawner, this.spawnersManager.getSpawnerType(spawner), this.spawnersManager.getStackSize(spawner));
 
     }
 

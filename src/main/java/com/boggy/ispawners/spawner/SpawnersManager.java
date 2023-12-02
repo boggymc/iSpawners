@@ -1,6 +1,8 @@
 package com.boggy.ispawners.spawner;
 
+import com.boggy.ispawners.ISpConfig;
 import com.boggy.ispawners.ISpawners;
+import com.jeff_media.morepersistentdatatypes.DataType;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -16,10 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnersManager {
 
     private final ISpawners plugin;
+    private final ISpConfig config;
     NamespacedKey spawnersStorageKey;
     NamespacedKey spawnerIdKey;
     NamespacedKey spawnerDropsKey;
@@ -30,6 +34,7 @@ public class SpawnersManager {
 
     public SpawnersManager(){
         this.plugin = ISpawners.getInstance();
+        this.config = this.plugin.getIspConfig();
 
         this.spawnersStorageKey = new NamespacedKey(this.plugin, "storage");
         this.spawnerIdKey = new NamespacedKey(this.plugin, "spawner_id");
@@ -65,15 +70,11 @@ public class SpawnersManager {
 
     private void loadSpawners(){
         plugin.getServer().getWorlds().forEach( (world) -> {
-
-            this.plugin.getLogger().info("World: " + world.getName());
                 PersistentDataContainer spawnersStorage = this.getSpawnersStorage(world);
                 for(NamespacedKey spawnerIdKey : spawnersStorage.getKeys()) {
-                    this.plugin.getLogger().info("spawnerIdKey: " + spawnerIdKey.toString());
                     int[] spawnerCoords = spawnersStorage.get(spawnerIdKey, PersistentDataType.INTEGER_ARRAY);
                     if(spawnerCoords == null) continue;
                     if(!(world.getBlockAt(spawnerCoords[0], spawnerCoords[1], spawnerCoords[2]).getState() instanceof CreatureSpawner spawner)) continue;
-                    this.plugin.getLogger().info("Found spawner: " + Arrays.toString(spawnerCoords));
                     this.spawners.add(spawner);
                 }
             }
@@ -110,7 +111,6 @@ public class SpawnersManager {
     public void removeSpawner(CreatureSpawner spawner){
 
         String spawnerId = this.getSpawnerId(spawner);
-        this.plugin.getLogger().info("Removing Spawner: " + spawnerId);
 
         PersistentDataContainer spawnersStorage = getSpawnersStorage(spawner.getWorld());
         NamespacedKey key = new NamespacedKey(this.plugin, spawnerId);
@@ -174,6 +174,90 @@ public class SpawnersManager {
         player.sendMessage(" - XP stored: " + xp);
         player.sendMessage(" - Drops: " + xp);
 
+    }
+
+    public @NotNull ConcurrentHashMap<Material, Integer> getDrops(CreatureSpawner spawner){
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        ConcurrentHashMap<Material, Integer> dropsData;
+
+        if(!pdc.has(this.spawnerDropsKey, DataType.asConcurrentHashMap(DataType.asEnum(Material.class), PersistentDataType.INTEGER)))
+            dropsData = new ConcurrentHashMap<>();
+        else
+            dropsData = pdc.get(this.spawnerDropsKey, DataType.asConcurrentHashMap(DataType.asEnum(Material.class), PersistentDataType.INTEGER));
+        return dropsData;
+    }
+
+    public void clearDrops(CreatureSpawner spawner){
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        pdc.set(this.spawnerDropsKey, DataType.asConcurrentHashMap(DataType.asEnum(Material.class), PersistentDataType.INTEGER), new ConcurrentHashMap<>());
+    }
+
+    public void updateDrops(CreatureSpawner spawner, double stackMultiplier){
+
+//        Gets current drops
+        ConcurrentHashMap<Material, Integer> dropsData = this.getDrops(spawner);
+        int maxDrops = this.config.getMaxDrops();
+        int totalDropsCount = this.getDropsCount(dropsData);
+        if(totalDropsCount >= maxDrops) return;
+
+//        Gets spawner ino
+        EntityType spawnerType = this.getSpawnerType(spawner);
+        int stackSize = this.getStackSize(spawner);
+
+//        Simulates a death and retrieves the drops
+        ConcurrentHashMap<Material, Integer> simulatedDeathDrops = this.simulateDeathDrops(spawnerType, stackSize, 1.5 );
+        simulatedDeathDrops.forEach( (material, addedAmount) -> {
+            if((totalDropsCount + addedAmount) > maxDrops)
+                addedAmount = maxDrops-totalDropsCount;
+            Integer currentAmount = dropsData.get(material);
+            if(currentAmount == null) currentAmount = 0;
+
+            dropsData.put(material, currentAmount + addedAmount);
+        });
+
+//        Saves updated drops to spawner's pdc
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        pdc.set(this.spawnerDropsKey, DataType.asConcurrentHashMap(DataType.asEnum(Material.class), PersistentDataType.INTEGER), dropsData);
+        spawner.update();
+
+    }
+
+    public @NotNull ConcurrentHashMap<Material, Integer> simulateDeathDrops(EntityType spawnerType, int stackSize, double stackMultiplier){
+        ConcurrentHashMap<Material, Integer> dropsData = new ConcurrentHashMap<>();
+
+        dropsData.put(Material.ROTTEN_FLESH, 30);
+        dropsData.put(Material.BONE, 10);
+        dropsData.put(Material.STRING, 100);
+        return dropsData;
+    }
+
+    public int getDropsCount(CreatureSpawner spawner){
+        return this.getDropsCount(this.getDrops(spawner));
+    }
+
+    public int getDropsCount(ConcurrentHashMap<Material, Integer> drops){
+
+        int currentDrops = 0;
+
+        Collection<Integer> amounts = drops.values();
+        for(int itemAmount : amounts){
+            currentDrops += itemAmount;
+        }
+
+        return currentDrops;
+
+    }
+
+    public int getXp(CreatureSpawner spawner){
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        Integer xpValue = pdc.get(this.spawnerXpKey, PersistentDataType.INTEGER);
+        return xpValue != null ? xpValue : 0;
+    }
+
+    public void setXp(CreatureSpawner spawner, int xpValue){
+        PersistentDataContainer pdc = spawner.getPersistentDataContainer();
+        pdc.set(this.spawnerXpKey, PersistentDataType.INTEGER, xpValue);
+        spawner.update();
     }
 
 }

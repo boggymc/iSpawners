@@ -1,4 +1,4 @@
-package com.boggy.ispawners.inventory;
+package com.boggy.ispawners.inventory.pages;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -22,13 +22,13 @@ public class PageUtil {
         return newItems;
     }
 
-    public static boolean isPageValid(List<ItemStack> items, int page, int spaces) {
+    public static boolean isPageValid(int dropCount, int page, int spaces) {
         if (page <= 0) { return false; }
 
         int upperBound = page * spaces;
         int lowerBound = upperBound - spaces;
 
-        return items.size() > lowerBound;
+        return dropCount > lowerBound;
     }
 
 }

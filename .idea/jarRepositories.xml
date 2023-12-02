@@ -12,6 +12,11 @@
       <option name="url" value="https://jitpack.io" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="jeff-media-public" />
+      <option name="name" value="jeff-media-public" />
+      <option name="url" value="https://hub.jeff-media.com/nexus/repository/jeff-media-public/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="sonatype" />
       <option name="name" value="sonatype" />
       <option name="url" value="https://oss.sonatype.org/content/groups/public/" />

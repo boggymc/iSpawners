@@ -1,6 +1,6 @@
 package com.boggy.ispawners;
 
-import com.boggy.ispawners.inventory.InventoryManager;
+import com.boggy.ispawners.inventory.listeners.InventoryListeners;
 import com.boggy.ispawners.spawner.SpawnersManager;
 import com.boggy.ispawners.spawner.listeners.SpawnerBreakListener;
 import com.boggy.ispawners.spawner.listeners.SpawnerInteractListener;
@@ -15,16 +15,14 @@ public final class ISpawners extends JavaPlugin {
 
     @Getter
     private static ISpawners instance;
-    private Config pluginConfig;
+    private ISpConfig ispConfig;
     private SpawnersManager spawnersManager;
-    private InventoryManager inventoryManager;
 
     @Override
     public void onEnable() {
         instance = this;
-        this.pluginConfig = new Config();
+        this.ispConfig = new ISpConfig();
         this.spawnersManager = new SpawnersManager();
-        this.inventoryManager = new InventoryManager();
 
         this.registerEvents();
     }
@@ -34,6 +32,7 @@ public final class ISpawners extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SpawnerBreakListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnerPlaceListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnerSpawnListener(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryListeners(), this);
 //        spawnerGenerator = new SpawnerGenerator(this);
     }
 
