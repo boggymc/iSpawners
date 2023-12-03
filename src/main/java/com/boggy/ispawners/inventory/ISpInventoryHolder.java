@@ -17,6 +17,7 @@ public abstract class ISpInventoryHolder implements InventoryHolder {
 
     protected Inventory inventory;
     protected ISpawners plugin;
+    protected ISpViewersManager viewersManager;
     protected ISpConfig config;
     protected SpawnersManager spawnersManager;
     protected CreatureSpawner spawner;
@@ -26,6 +27,7 @@ public abstract class ISpInventoryHolder implements InventoryHolder {
         this.plugin = ISpawners.getInstance();
         this.config = this.plugin.getIspConfig();
         this.spawnersManager = this.plugin.getSpawnersManager();
+        this.viewersManager = this.plugin.getViewersManager();
 
         this.spawner = spawner;
 

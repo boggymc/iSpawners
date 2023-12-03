@@ -1,6 +1,8 @@
 package com.boggy.ispawners.inventory.pages;
 
 import com.boggy.ispawners.inventory.ISpInventoryHolder;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
@@ -20,7 +22,11 @@ public class ISpMenuPage extends ISpInventoryHolder {
     public ISpMenuPage(Player player, CreatureSpawner spawner, EntityType spawnerType, int stackSize)  {
         super(27, spawner, spawnerType, stackSize);
 
-        this.inventory.setMaxStackSize(64);
+//        Prevents multiple people viewing the same spawner
+        if(this.viewersManager.isOpened(spawner)){
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "Someone is already viewing this spawner"));
+            return;
+        }
 
         double dropsCount = this.spawnersManager.getDropsCount(spawner);
         this.inventory.setItem(11, this.getDropsItemStack((int) dropsCount));
@@ -48,13 +54,14 @@ public class ISpMenuPage extends ISpInventoryHolder {
         switch(item.getType()) {
             case CHEST:
                 player.closeInventory();
-                new ISpDropsPage(player, this.title, 1, this.spawner);
+                PageUtil.generatePages(player, this.title, this.spawner, this.spawnersManager.getDrops(this.spawner));
+//                new ISpDropsPage(player, this.title, 1, this.spawner);
                 break;
             case EXPERIENCE_BOTTLE:
                 break;
             case GOLD_INGOT:
                 this.plugin.getLogger().info("Sold all items - ISpMenuPage");
-                new ISpDropsPage(player, this.title, 1, this.spawner);
+//                new ISpDropsPage(player, this.title, 1, this.spawner);
                 break;
             default:
                 break;
