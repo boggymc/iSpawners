@@ -38,14 +38,40 @@ public class PageUtil {
 
     public static List<ISpDropsPage> generatePages(Player viewer, String title, CreatureSpawner spawner, ConcurrentHashMap<Material, Integer> drops){
         List<ISpDropsPage> pages = new ArrayList<>();
+        Collection<ItemStack> fullItemStacks = new ArrayList<>();
+        Collection<ItemStack> leftoverItemStacks = new ArrayList<>();
 
-        Collection<ItemStack> pageItemStacks = new ArrayList<>();
+        drops.forEach( (material, amount) -> {
+            viewer.sendMessage("Item: " + material + " - Amount: " + amount);
+            int numberOfStacks = (amount/64);
 
-        new ISpDropsPage(viewer, title, 1, spawner, pageItemStacks);
+            for(int i=0; i>numberOfStacks; i++){
+                ItemStack fullStack = new ItemStack(material);
+                fullStack.setAmount(64);
+                fullItemStacks.add(fullStack);
+            }
+            int leftover = amount%64;
+            ItemStack leftoverStack = new ItemStack(material);
+            leftoverStack.setAmount(leftover);
+            leftoverItemStacks.add(leftoverStack);
+        });
 
+        int stacksInPage= 0;
+        int pageNumber = 1;
+        Collection<ItemStack> pageContent = new ArrayList<>();
+        for(ItemStack item : fullItemStacks){
+            if(stacksInPage == 47){
+                ISpDropsPage page = new ISpDropsPage(viewer, title,pageNumber, 5, pageContent);
+                pages.add(page);
+                stacksInPage = 0;
+                pageNumber++;
+                pageContent = new ArrayList<>();
+            }
+            pageContent.add(item);
+            stacksInPage++;
+        }
 
-
-
+        return pages;
     }
 
 }

@@ -3,7 +3,6 @@ package com.boggy.ispawners.inventory.pages;
 import com.boggy.ispawners.inventory.ISpInventoryHolder;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,36 +11,30 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ISpDropsPage extends ISpInventoryHolder {
 
-    public ISpDropsPage(Player player, String title, int pageNumber, CreatureSpawner spawner, Collection<ItemStack> pageItemStacks)  {
-        super(54, title, spawner);
+    public ISpDropsPage(Player player, String title, int pageNumber, int totalPages, Collection<ItemStack> pageItemStacks)  {
+        super(54, title, null);
 
+        int stacks = pageItemStacks.size();
+        player.sendMessage("Page Stacks:" + stacks);
 
-        ConcurrentHashMap<Material, Integer> spawnerDrops = this.spawnersManager.getDrops(spawner);
-        int dropCount = this.spawnersManager.getDropsCount(spawner);
-        List<ItemStack> allDrops = new ArrayList<>();
-        spawnerDrops.forEach( (material, amount) -> {
-            ItemStack dropStack = new ItemStack(material, amount);
-            dropStack.setAmount(amount);
-            allDrops.add(dropStack);
+        inventory.setItem(48, this.getPrevPageItem(pageNumber, totalPages));
+        inventory.setItem(49, this.getSellAllItem(1));
+        inventory.setItem(50, this.getNextPageItem(pageNumber, totalPages));
+
+        pageItemStacks.forEach( (item) -> {
+            inventory.addItem(item);
         });
-
-        inventory.setItem(48, this.getPrevPageItem(dropCount, pageNumber));
-        inventory.setItem(49, this.getSellAllItem(dropCount));
-        inventory.setItem(50, this.getNextPageItem(dropCount, pageNumber));
-
-        for (ItemStack is : PageUtil.getPageItems(allDrops, pageNumber,  45 * 64)) {
-            inventory.addItem(is);
-        }
 
         player.openInventory(this.getInventory());
     }
+
+//    public Collection<ItemStack> addItems(){
+//        inventory.all()
+//    }
 
     @Override
     public void onClick(InventoryClickEvent e) {
@@ -55,7 +48,7 @@ public class ISpDropsPage extends ISpInventoryHolder {
     }
 
     public ItemStack getPrevPageItem(int dropCount, int currentPage){
-        ItemStack prevItem = getPageItem(PageUtil.isPageValid(dropCount, currentPage - 1, 45 * 64), "BACKWARDS");
+        ItemStack prevItem = getPageItem(false, "BACKWARDS");
         ItemMeta prevMeta = prevItem.getItemMeta();
         prevMeta.setLocalizedName(currentPage + "");
         prevItem.setItemMeta(prevMeta);
@@ -63,7 +56,7 @@ public class ISpDropsPage extends ISpInventoryHolder {
     }
 
     public ItemStack getNextPageItem(int dropCount, int currentPage){
-        ItemStack nextItem = getPageItem(PageUtil.isPageValid(dropCount, currentPage + 1, 45 * 64), "FORWARDS");
+        ItemStack nextItem = getPageItem(true, "FORWARDS");
         ItemMeta nextMeta = nextItem.getItemMeta();
         nextMeta.setLocalizedName(currentPage + "");
         nextItem.setItemMeta(nextMeta);

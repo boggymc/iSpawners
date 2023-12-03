@@ -1,5 +1,6 @@
 package com.boggy.ispawners;
 
+import com.boggy.ispawners.inventory.ISpViewersManager;
 import com.boggy.ispawners.inventory.listeners.InventoryListeners;
 import com.boggy.ispawners.spawner.SpawnersManager;
 import com.boggy.ispawners.spawner.listeners.SpawnerBreakListener;
@@ -17,12 +18,14 @@ public final class ISpawners extends JavaPlugin {
     private static ISpawners instance;
     private ISpConfig ispConfig;
     private SpawnersManager spawnersManager;
+    private ISpViewersManager viewersManager;
 
     @Override
     public void onEnable() {
         instance = this;
         this.ispConfig = new ISpConfig();
         this.spawnersManager = new SpawnersManager();
+        this.viewersManager = new ISpViewersManager();
 
         this.registerEvents();
     }
