@@ -35,14 +35,14 @@ public abstract class ISpInventoryHolder implements InventoryHolder {
         this.inventory = Bukkit.createInventory(this, inventorySize, this.title);
     }
 
-    public ISpInventoryHolder(int inventorySize, String title, CreatureSpawner spawner){
+    public ISpInventoryHolder(){
         this.plugin = ISpawners.getInstance();
         this.config = this.plugin.getIspConfig();
         this.spawnersManager = this.plugin.getSpawnersManager();
+    }
 
-        this.spawner = spawner;
-        this.title = title;
-        this.inventory = Bukkit.createInventory(this, inventorySize, title);
+    public void createInventory(int size, String title){
+        this.inventory = Bukkit.createInventory(this, size, title);
     }
 
     @Override

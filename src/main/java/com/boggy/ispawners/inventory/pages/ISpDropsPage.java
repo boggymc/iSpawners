@@ -2,44 +2,63 @@ package com.boggy.ispawners.inventory.pages;
 
 import com.boggy.ispawners.inventory.ISpInventoryHolder;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Collection;
 
 public class ISpDropsPage extends ISpInventoryHolder {
 
-    public ISpDropsPage(Player player, String title, int pageNumber, int totalPages, Collection<ItemStack> pageItemStacks)  {
-        super(54, title, null);
+    private final int PAGE_NUMBER;
+    private final int TOTAL_PAGES;
 
-        int stacks = pageItemStacks.size();
-        player.sendMessage("Page Stacks:" + stacks);
+
+    public ISpDropsPage(int pageNumber, int totalPages, ItemStack[] itemStacks, int stackSize, EntityType spawnerType)  {
+        super();
+
+        this.PAGE_NUMBER = pageNumber;
+        this.TOTAL_PAGES = totalPages;
+
+        this.title = (stackSize == 1 ? "" : (stackSize + " ")) + (spawnerType == null ? "Empty" : WordUtils.capitalizeFully(spawnerType.name())) + (stackSize > 1 ? " Spawners" : " Spawner");
+        this.title += " (Page " + PAGE_NUMBER + "/" + TOTAL_PAGES + ")";
+
+        inventory.setItem(45, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+        inventory.setItem(46, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+        inventory.setItem(47, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
 
         inventory.setItem(48, this.getPrevPageItem(pageNumber, totalPages));
         inventory.setItem(49, this.getSellAllItem(1));
         inventory.setItem(50, this.getNextPageItem(pageNumber, totalPages));
 
-        pageItemStacks.forEach( (item) -> {
-            inventory.addItem(item);
-        });
+        inventory.setItem(51, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+        inventory.setItem(52, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+        inventory.setItem(53, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
 
-        player.openInventory(this.getInventory());
+        this.inventory.setStorageContents(itemStacks);
+
     }
 
-//    public Collection<ItemStack> addItems(){
-//        inventory.all()
-//    }
 
     @Override
     public void onClick(InventoryClickEvent e) {
-        e.setCancelled(true);
+        switch(e.getAction()){
 
+            case PICKUP_ALL, PICKUP_HALF, PICKUP_ONE, PICKUP_SOME:
+                return;
+            case DROP_ALL_CURSOR, DROP_ALL_SLOT, DROP_ONE_CURSOR, DROP_ONE_SLOT:
+                if(e.getClickedInventory() instanceof PlayerInventory)
+                    e.getWhoClicked().sendMessage("Is player inventory");
+                else
+                    e.getWhoClicked().sendMessage("Is not player inventory");
+            default:
+                e.setCancelled(true);
+        }
     }
 
     @Override
