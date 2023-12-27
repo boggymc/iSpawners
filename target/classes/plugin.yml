@@ -1,6 +1,0 @@
-name: ISpawners
-version: '1.0'
-main: com.boggy.ispawners.ISpawners
-api-version: '1.19'
-commands:
-  ispawners:
