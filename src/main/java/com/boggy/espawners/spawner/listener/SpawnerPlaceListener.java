@@ -1,10 +1,7 @@
-// Decompiled with: CFR 0.152
-// Class Version: 17
 package com.boggy.espawners.spawner.listener;
 
 import com.boggy.espawners.ISpawners;
 import com.boggy.espawners.pdc.SpawnerUtils;
-import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.CreatureSpawner;
@@ -15,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.mineacademy.fo.remain.Remain;
+
+import java.util.UUID;
 
 public class SpawnerPlaceListener
         implements Listener {

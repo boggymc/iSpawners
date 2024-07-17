@@ -1,5 +1,3 @@
-// Decompiled with: CFR 0.152
-// Class Version: 17
 package com.boggy.espawners;
 
 import com.boggy.espawners.command.ISpawnersCommand;
@@ -12,21 +10,9 @@ import com.boggy.espawners.spawner.listener.SpawnerBreakListener;
 import com.boggy.espawners.spawner.listener.SpawnerInteractListener;
 import com.boggy.espawners.spawner.listener.SpawnerPlaceListener;
 import com.boggy.espawners.spawner.listener.SpawnerSpawnListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,6 +23,14 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 public final class ISpawners
