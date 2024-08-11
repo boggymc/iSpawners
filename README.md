@@ -8,5 +8,5 @@ Commands: <br>
 /ispawners setspawnerstack <amount> <br>
 /ispawners givespawner <spawnertype>
 
-Author: BoggyMC
+Author: BoggyMC<br>
 Maintainer: Yuke Evans
