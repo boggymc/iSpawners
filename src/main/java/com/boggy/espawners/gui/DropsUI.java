@@ -1,15 +1,20 @@
 package com.boggy.espawners.gui;
 
-import org.bukkit.entity.*;
-import org.bukkit.block.*;
-import com.boggy.espawners.*;
-import org.bukkit.*;
-import org.bukkit.inventory.*;
-import java.util.*;
-import org.bukkit.inventory.meta.*;
+import com.boggy.espawners.ISpawners;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class DropsUI
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class DropsUI {
     public DropsUI(final Player player, final CreatureSpawner spawner, final ISpawners plugin, final int page) {
         if (!plugin.getSpawners().contains(spawner)) {
             player.closeInventory();
@@ -19,7 +24,7 @@ public class DropsUI
         final String spawnerType = spawner.getSpawnedType().toString().toLowerCase();
         final String spawnerTypeCapitalised = spawnerType.substring(0, 1).toUpperCase() + spawnerType.substring(1);
         final String spawnerText = (stackSize > 1) ? "Spawners" : "Spawner";
-        final Inventory gui = Bukkit.createInventory((InventoryHolder)null, 54, stackSize + " " + spawnerTypeCapitalised + " " + spawnerText);
+        final Inventory gui = Bukkit.createInventory((InventoryHolder) null, 54, stackSize + " " + spawnerTypeCapitalised + " " + spawnerText);
         final List<ItemStack> allItems = new ArrayList<ItemStack>();
         ArrayList<Material> materials = plugin.getDrops(spawner);
         if (materials == null) {
@@ -38,8 +43,7 @@ public class DropsUI
             left = new ItemStack(Material.SPECTRAL_ARROW);
             leftMeta = left.getItemMeta();
             leftMeta.setDisplayName("" + ChatColor.YELLOW + ChatColor.BOLD + "BACKWARDS");
-        }
-        else {
+        } else {
             left = new ItemStack(Material.ARROW);
             leftMeta = left.getItemMeta();
             leftMeta.setDisplayName("" + ChatColor.RED + ChatColor.BOLD + "BACKWARDS");
@@ -53,8 +57,7 @@ public class DropsUI
             right = new ItemStack(Material.SPECTRAL_ARROW);
             rightMeta = right.getItemMeta();
             rightMeta.setDisplayName("" + ChatColor.YELLOW + ChatColor.BOLD + "FORWARDS");
-        }
-        else {
+        } else {
             right = new ItemStack(Material.ARROW);
             rightMeta = right.getItemMeta();
             rightMeta.setDisplayName("" + ChatColor.RED + ChatColor.BOLD + "FORWARDS");
@@ -62,7 +65,7 @@ public class DropsUI
         right.setItemMeta(rightMeta);
         gui.setItem(50, right);
         for (final ItemStack is : PageUtil.getPageItems(allItems, page, 2880)) {
-            gui.addItem(new ItemStack[] { is });
+            gui.addItem(new ItemStack[]{is});
         }
         gui.setItem(45, new ItemStack(Material.AIR));
         gui.setItem(46, new ItemStack(Material.AIR));
