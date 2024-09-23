@@ -40,7 +40,7 @@
 
                 <!-- Change version to the latest one from
                      https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
-                <version>3.9.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -56,7 +56,7 @@
                      IF YOU USE JAVA 16 THEN PLACE 3.3.0-SNAPSHOT TO THE VERSION AND MAKE SURE TO
                      UNCOMMENT <pluginRepositories> above.
                      -->
-                <version>3.3.1-SNAPSHOT</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -120,7 +120,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <!-- Change version to the latest because
+                     https://howtodoinjava.com/lombok/lombok-nosuchfielderror-error/ -->
+            <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
